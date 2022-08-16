@@ -1,0 +1,15 @@
+## IDEs
+/.vscode
+/.idea
+
+## C
+*.o
+*.a
+*.out
+
+## Temp dirs & trash
+/temp
+/tmp
+.DS_Store
+*.cache
+/ctpl
