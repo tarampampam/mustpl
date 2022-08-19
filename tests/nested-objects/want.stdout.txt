@@ -1,0 +1,50 @@
+This are extensions!!
+
+Jon
+25
+
+Fred
+The other Fred.
+
+Hello Jon
+
+
+No Harry? Hey Calahan...
+
+Hello Fred
+
+
+Hello Fred#2
+
+
+Hello Jon, 25 years
+
+Hello Henry, 27 years
+
+
+Salut Amed, 24 ans
+
+Jon: /25/25
+Henry: /27/
+Amed: 24/24/24
+
+Jon: /25/25
+Henry: /27/
+Amed: 24/24/24
+
+ (1) person: {&quot;name&quot;:&quot;Jon&quot;,&quot;age&quot;:25}
+     (2) name: Jon
+     (2) age: 25
+ (1) person.name: Fred
+ (1) person.name=Fred: The other Fred.
+ (1) persons: [{&quot;name&quot;:&quot;Jon&quot;,&quot;age&quot;:25,&quot;lang&quot;:&quot;en&quot;},{&quot;name&quot;:&quot;Henry&quot;,&quot;age&quot;:27,&quot;lang&quot;:&quot;en&quot;},{&quot;name&quot;:&quot;Amed&quot;,&quot;age&quot;:24,&quot;lang&quot;:&quot;fr&quot;}]
+ (1) fellows: {&quot;Jon&quot;:{&quot;age&quot;:25,&quot;lang&quot;:&quot;en&quot;},&quot;Henry&quot;:{&quot;age&quot;:27,&quot;lang&quot;:&quot;en&quot;},&quot;Amed&quot;:{&quot;age&quot;:24,&quot;lang&quot;:&quot;fr&quot;}}
+     (2) Jon: {&quot;age&quot;:25,&quot;lang&quot;:&quot;en&quot;}
+       (3) age: 25
+       (3) lang: en
+     (2) Henry: {&quot;age&quot;:27,&quot;lang&quot;:&quot;en&quot;}
+       (3) age: 27
+       (3) lang: en
+     (2) Amed: {&quot;age&quot;:24,&quot;lang&quot;:&quot;fr&quot;}
+       (3) age: 24
+       (3) lang: fr

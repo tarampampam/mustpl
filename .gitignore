@@ -2,14 +2,11 @@
 /.vscode
 /.idea
 
-## C
-*.o
-*.a
-*.out
+## Project
+/ctpl
 
 ## Temp dirs & trash
 /temp
 /tmp
 .DS_Store
 *.cache
-/ctpl

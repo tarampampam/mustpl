@@ -1,0 +1,2 @@
+ctpl: No template file provided
+Try `ctpl --help' or `ctpl --usage' for more information.
