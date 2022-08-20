@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
-#include "cjson/cJSON.h"
-#include "mustach/mustach-cjson.h"
+#include "../libs/cjson/cJSON.h"
+#include "../libs/mustach/mustach-cjson.h"
 #include "utils.h"
 #include "cli.h"
 
@@ -77,6 +77,8 @@ int main(int argc, char **argv) {
 		for (size_t i = 0; i < arguments.exec->args_len; i++) {
 			appArgv[i + 1] = arguments.exec->args[i];
 		}
+
+		appArgv[arguments.exec->args_len + 1] = NULL;
 
 		errno = 0;
 

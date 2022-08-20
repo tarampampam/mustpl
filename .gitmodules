@@ -1,6 +1,0 @@
-[submodule "src/mustach"]
-	path = src/mustach
-	url = https://gitlab.com/jobol/mustach
-[submodule "src/cjson"]
-	path = src/cjson
-	url = https://github.com/DaveGamble/cJSON

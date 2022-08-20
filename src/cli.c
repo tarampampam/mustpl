@@ -10,10 +10,10 @@
 const char *argp_program_version = APP_VERSION;
 
 // bug-reporting address for the program
-const char *argp_program_bug_address = "https://github.com/tarampampam/ctpl/issues";
+const char *argp_program_bug_address = "https://github.com/tarampampam/mustpl/issues";
 
 // the exit status that argp will use when exiting due to a parsing error
-error_t argp_err_exit_status = 2;
+error_t argp_err_exit_status = EXIT_FAILURE;
 
 // options
 static struct argp_option options[] = {

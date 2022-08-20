@@ -1,2 +1,2 @@
-ctpl: No template file provided
-Try `ctpl --help' or `ctpl --usage' for more information.
+mustpl: No template file provided
+Try `mustpl --help' or `mustpl --usage' for more information.
