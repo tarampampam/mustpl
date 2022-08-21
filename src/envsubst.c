@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "envsubst.h"
 
 struct buffer {
@@ -16,11 +17,6 @@ static struct buffer *newBuf(unsigned int cap) {
 	memset(b->data, '\0', b->cap);
 
 	return b;
-}
-
-static void freeBuf(struct buffer *buf) {
-	free(buf->data);
-	free(buf);
 }
 
 static void emptyBuf(struct buffer *buf) {
@@ -52,21 +48,6 @@ static void writeStringInBuf(struct buffer *buf, const char *str) {
 	for (unsigned int j = 0; str[j] != '\0'; j++) {
 		writeInBuf(buf, str[j]);
 	}
-}
-
-static void dumpBuf(struct buffer *buf) { // TODO: just for debug
-	printf(
-		"data pointer:\t%p\ndata len/cap:\t%d/%d\n",
-		buf->data,
-		buf->len,
-		buf->cap
-	);
-
-	for (unsigned int i = 0; i < buf->cap; ++i) {
-		printf("%d [%c] %d\t", i, buf->data[i], buf->data[i]);
-	}
-
-	printf("\n\n");
 }
 
 char *envsubst(const char *str) {
@@ -131,8 +112,11 @@ char *envsubst(const char *str) {
 		}
 	}
 
-	freeBuf(envName);
-	freeBuf(envDef);
+	free(envName->data);
+	free(envName);
+
+	free(envDef->data);
+	free(envDef);
 
 	char *data = result->data;
 	free(result);
@@ -142,6 +126,11 @@ char *envsubst(const char *str) {
 
 int main() {
 	char *input = "__$FOO ${bar} $FOO:def ${FOO:-def} bla-bla ${FOO2:-тест}";
+
+	assert(strcmp(
+		envsubst("__$FOO ${bar} $FOO:def ${FOO:-def} bla-bla ${FOO2:-тест}"),
+		"__$FOO  $FOO:def yeah bla-bla тест"
+	));
 
 	printf(
 		"\ninput:\t%s\nwant:\t%s\nresult:\t%s\n",
