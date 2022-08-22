@@ -8,22 +8,15 @@ COPY . /tmp/mustpl
 
 WORKDIR /tmp/mustpl
 
-ARG BUILD_STATIC="yes"
 ARG VERSION="0.0.0-undefined"
 
-# compile a static binary file
-RUN make static="$BUILD_STATIC" version="$VERSION"
-
-RUN set -x \
-    && if [ "${BUILD_STATIC}" = "yes" ]; then \
-        # exit with error code 1 if the executable is dynamic (not static)
-        ldd ./mustpl && exit 1 || true \
-    ;fi
+# compile
+RUN make version="$VERSION"
 
 # tests running is not required, but strongly recommended
 RUN make test
 
-# pack and print out some info about binary file
+# print out some info about the binary file
 RUN set -x \
     && ./mustpl --version \
     && ./mustpl --help \

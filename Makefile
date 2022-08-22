@@ -2,13 +2,9 @@
 
 CC = gcc
 TARGET = mustpl
-LDFLAGS = -std=gnu99 -s -Wall -Werror -Wl,--build-id=none
+LDFLAGS = -std=gnu99 -s -static -Wall -Werror -Wl,--build-id=none
 CFLAGS = -std=gnu99 -c -fPIC -Wall -Wextra -g -Os
 version ?= 0.0.0-undefined
-
-ifeq (${static},yes) # run with `make static=yes`
-LDFLAGS += -static
-endif
 
 .PHONY: all src/version.h $(TARGET) clean
 all: $(TARGET)

@@ -1,0 +1,5 @@
+FROM nginx:alpine
+
+COPY --from=ghcr.io/tarampampam/mustpl:latest /bin/mustpl /bin/mustpl
+
+RUN mustpl --version
