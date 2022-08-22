@@ -7,7 +7,7 @@
 #include "cli.h"
 #include "envsubst.h"
 
-char *readFile(const char *filePath) {
+static char *readFile(const char *filePath) {
 	FILE *f = fopen(filePath, "rb");
 
 	if (!f) {
@@ -29,7 +29,7 @@ char *readFile(const char *filePath) {
 	return data;
 }
 
-void writeFile(const char *filePath, const char *text) {
+static void writeFile(const char *filePath, const char *text) {
 	FILE *f = fopen(filePath, "w");
 
 	if (!f) {
@@ -42,6 +42,22 @@ void writeFile(const char *filePath, const char *text) {
 
 	fclose(f);
 }
+
+static const char *mustErrors[] = {
+	"??? unreferenced ???",
+	"system",
+	"unexpected end",
+	"empty tag",
+	"tag too long",
+	"bad separators",
+	"too depth",
+	"closing",
+	"bad unescape tag",
+	"invalid interface",
+	"item not found",
+	"partial not found",
+	"undefined tag"
+};
 
 int main(int argc, char **argv) {
 	struct CliArguments arguments = {NULL};
@@ -79,7 +95,7 @@ int main(int argc, char **argv) {
 	char *result;
 	size_t *resultLength = 0;
 
-	mustach_cJSON_mem( // render the template
+	int s = mustach_cJSON_mem( // render the template
 		template,
 		0,
 		jsonRoot,
@@ -90,6 +106,18 @@ int main(int argc, char **argv) {
 
 	cJSON_Delete(jsonRoot);
 	free(template);
+
+	if (s != MUSTACH_OK) {
+		s = -s;
+
+		if (s < 1 || s >= (int)(sizeof mustErrors / sizeof * mustErrors)) {
+			s = 0;
+		}
+
+		fprintf(stderr, "Template error: %s\n", mustErrors[s]);
+
+		return EXIT_FAILURE;
+	}
 
 	if (arguments.output_file) {
 		writeFile(arguments.output_file, result);
