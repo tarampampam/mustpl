@@ -1,7 +1,6 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
+#include <stdbool.h>
 #include "envsubst.h"
 
 struct buffer {
@@ -50,6 +49,10 @@ static void writeStringInBuf(struct buffer *buf, const char *str) {
 	}
 }
 
+/**
+ * Parse the string and replace patterns in format `${ENV_NAME:-default_value}` with
+ * the values from the environment (or default values after `:-` if provided).
+ */
 char *envsubst(const char *str) {
 	unsigned int strLen = strlen(str);
 	struct buffer *result = newBuf(strLen);
@@ -61,25 +64,33 @@ char *envsubst(const char *str) {
 			ENV_NAME,
 			ENV_DEFAULT,
 	} state = DATA, prevState = DATA;
+	bool flush = false;
+	unsigned int nested = 0;
 
-	for (unsigned int i = 0; i < strLen; i++) {
+	for (unsigned int i = 0; str[i] != '\0'; i++) {
 		// detect the state
 		if (str[i] == '$' && str[i + 1] == '{') {
-			i++; // jump forward
+			i++;
+			nested++;
 			prevState = state;
 			state = ENV_NAME;
 
 			continue;
-		} else if (state == ENV_NAME && (str[i] == ':' && str[i + 1] == '-')) {
-			i++; // jump forward
+		} else if ((str[i] == ':' && str[i + 1] == '-') && state == ENV_NAME) {
+			i++;
 			prevState = state;
 			state = ENV_DEFAULT;
 
 			continue;
-		} else if ((state == ENV_NAME || state == ENV_DEFAULT) && str[i] == '}') {
-			i++;
-			prevState = state;
-			state = DATA;
+		} else if (str[i] == '}' && (state == ENV_NAME || state == ENV_DEFAULT)) {
+			nested--;
+
+			if (nested == 0) {
+				i++;
+				prevState = state;
+				state = DATA;
+				flush = true;
+			}
 		}
 
 		const char c = str[i];
@@ -108,6 +119,13 @@ char *envsubst(const char *str) {
 					emptyBuf(envDef);
 				}
 
+				if (flush) {
+					i--;
+					flush = false;
+
+					continue;
+				}
+
 				writeInBuf(result, c);
 		}
 	}
@@ -124,18 +142,43 @@ char *envsubst(const char *str) {
 	return data;
 }
 
-int main() {
-	char *input = "__$FOO ${bar} $FOO:def ${FOO:-def} bla-bla ${FOO2:-тест}";
-
-	assert(strcmp(
-		envsubst("__$FOO ${bar} $FOO:def ${FOO:-def} bla-bla ${FOO2:-тест}"),
-		"__$FOO  $FOO:def yeah bla-bla тест"
-	));
-
-	printf(
-		"\ninput:\t%s\nwant:\t%s\nresult:\t%s\n",
-		input,
-		"__$FOO  $FOO:def yeah bla-bla тест",
-		envsubst(input)
-		);
-}
+//#include <assert.h>
+//#include <stdio.h>
+//
+//// tests running: `gcc -o ./tmp/subs ./src/envsubst.c && ./tmp/subs`
+//int main() {
+//	putenv("Test_1=foo");
+//	putenv("__#Test_2=😎");
+//
+//	assert(strcmp(
+//		envsubst("__$_UNSET_VAR_ ${_UNSET_VAR_} ${_UNSET_VAR_:-default value 😎}"),
+//		"__$_UNSET_VAR_  default value 😎"
+//	) == 0);
+//
+//	assert(strcmp(
+//		envsubst("${__#Test_2} ${__#Test_2:-foo}${_UNSET_VAR_:-def}${__#Test_2}"),
+//		"😎 😎def😎"
+//	) == 0);
+//
+//	assert(strcmp(
+//		envsubst("${Test_1} ${Test_1:-def}${Test_1}"),
+//		"foo foofoo"
+//	) == 0);
+//
+//	assert(strcmp(
+//		envsubst("__$FOO ${bar} $FOO:def ${Test_1:-def} ${Test_1} ${_UNSET_VAR_:-default} bla-bla ${FOO2:-тест}${ABC} ${}${}"),
+//		"__$FOO  $FOO:def foo foo default bla-bla тест "
+//	) == 0);
+//
+//	assert(strcmp(
+//		envsubst("${_UNSET_VAR_:-${Test_1}}"),
+//		""
+//	) == 0);
+//
+//	assert(strcmp(
+//		envsubst("aaa ${}} ${${} bbb"),
+//		"aaa } "
+//	) == 0);
+//
+//	// printf("%s\n", envsubst("aaa ${}} ${${} bbb"));
+//}
