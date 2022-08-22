@@ -4,6 +4,7 @@
 .idea
 .git
 LICENSE
+/obj/*.o
 mustpl
 temp
 tmp
