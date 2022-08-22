@@ -239,7 +239,7 @@ You have just won 10000 dollars!
 Well, 6000 dollars, after taxes.
 ```
 
-#### Loops
+### 🔄 Loops
 
 Okay, but what about the **loops**? Let's see:
 
@@ -302,7 +302,7 @@ server {
 }
 ```
 
-#### Template data providing using options
+### 🚩 Template data providing using options
 
 You can provide your template data using the `-d` (`--data`) option:
 
@@ -331,7 +331,7 @@ server {
 }
 ```
 
-#### Environment variables
+### 📎 Environment variables
 
 Environment variables can be used in the format `${ENV_NAME:-default value}` (inside template data file too; _template from the example above is used_):
 
@@ -348,7 +348,7 @@ server {
 }
 ```
 
-#### `exec` and the PID magic
+### 🛰 `exec` and the PID magic
 
 As you probably know, the main process inside the docker container should have PID == 1 for the correct signals processing from the docker daemon. That's why basically entrypoint scripts have the following code:
 
