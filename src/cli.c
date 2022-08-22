@@ -21,46 +21,11 @@ static struct argp_option options[] = {
 	{"data",      'd', "<json-string>", .doc = "Template data in JSON-string format (has higher priority than --data-file flag)"},
 	{"data-file", 'f', "<file>", .doc = "Read template data from the JSON file"},
 
-	{.doc = "Template variables:", .flags = OPTION_DOC},
-	{"var",       'v', "foo:bar", .doc = "Override variable 'foo' in the template data with 'bar'. In addition, you can use '$FOO' as a value for reading values from the environment variables (use '$$' as a prefix to ignore this - '$$FOO' -> '$FOO')"},
-
 	{.doc = "Output:", .flags = OPTION_DOC},
 	{"out",       'o', "<out-file>", .doc = "Write output to the file instead of standard output"},
 
 	{0},
 };
-
-static struct TemplateVariable *parseVariable(char *arg) {
-	struct TemplateVariable *var = malloc(sizeof(struct TemplateVariable));
-
-	unsigned argLen = strlen(arg);
-	unsigned delimiterPosition = (strchr(arg, ':') - arg);
-
-	if (delimiterPosition + 1 < argLen) {
-		var->name = substr(arg, 0, (int) delimiterPosition);
-		var->value = substr(arg, (int) delimiterPosition + 1, (int) argLen);
-
-		unsigned valueLen = strlen(var->value);
-
-		if (valueLen >= 2 && strstr(var->value, "$")) {
-			char *newValue = substr(var->value, 1, (int) valueLen); // without `$` at the start
-
-			if (strstr(var->value, "$$")) { // transform `$$FOO` to `$FOO`
-				var->value = newValue; // drop one `$` ($$FOO -> $FOO)
-			} else {
-				char *envVar = getenv(newValue); // get the environment value for `FOO`
-
-				if (envVar) {
-					var->value = envVar;
-				}
-			}
-		}
-	}
-
-	var->next = NULL;
-
-	return var;
-}
 
 static error_t parseOptions(int key, char *arg, struct argp_state *state) {
 	struct CliArguments *in = state->input;
@@ -78,21 +43,6 @@ static error_t parseOptions(int key, char *arg, struct argp_state *state) {
 			in->output_file = arg;
 			break;
 
-		case 'v':
-			if (!in->vars) { // lazy init
-				in->vars = parseVariable(arg);
-			} else {
-				struct TemplateVariable *newVar = parseVariable(arg);
-				struct TemplateVariable *current = in->vars;
-
-				while (current->next) { // locate to the last element in the list
-					current = in->vars->next;
-				}
-
-				current->next = newVar;
-			}
-			break;
-
 		case ARGP_KEY_ARG:
 			if (!in->template_file) {
 				in->template_file = arg;
@@ -100,12 +50,12 @@ static error_t parseOptions(int key, char *arg, struct argp_state *state) {
 				if (!in->exec) {
 					struct ExecProcess *exec = malloc(sizeof(struct ExecProcess));
 					exec->path = arg;
-					exec->_real_args_len = state->argc;
-					exec->args = malloc(exec->_real_args_len * sizeof(char *));
+					exec->args = malloc(state->argc * sizeof(char *));
 
 					in->exec = exec;
 				} else {
 					in->exec->args[in->exec->args_len] = arg;
+					in->exec->args[in->exec->args_len+1] = NULL;
 					in->exec->args_len++;
 				}
 			}
@@ -143,8 +93,10 @@ void CliParseArguments(int argc, char **argv, struct CliArguments *args) {
 		options,
 		parseOptions,
 		"<template-file> [-- <exec-command>]",
-		"\n{{ mustach }} templating tool. For more details about the templating engine and rules please follow "
-		"this link: https://mustache.github.io/mustache.5.html",
+		"\n{{ mustach }} templating tool. For more details about the templating engine and rules, please, follow "
+		"this link: https://mustache.github.io/mustache.5.html\n\n"
+		"You can use environment variables in your template data using the following format: ${ENV_NAME} or "
+		"${ENV_NAME:-default value}. Only those formats are allowed (not $ENV_NAME).",
 		NULL,
 		NULL,
 		NULL

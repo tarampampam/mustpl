@@ -1,0 +1,5 @@
+case1: __$_UNSET_VAR_  default value 😎
+case2: 😎 😎def😎
+case3: foo foofoo
+case4: __$FOO  $FOO:def foo foo default bla-bla тест 
+case5: 

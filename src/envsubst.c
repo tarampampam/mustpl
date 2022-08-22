@@ -13,6 +13,7 @@ static struct buffer *newBuf(unsigned int cap) {
 
 	b->data = malloc(cap * sizeof(char));
 	b->cap = cap;
+	b->len = 0;
 	memset(b->data, '\0', b->cap);
 
 	return b;
@@ -27,17 +28,18 @@ static void emptyBuf(struct buffer *buf) {
 
 static void writeInBuf(struct buffer *buf, const char c) {
 	if (buf->cap <= buf->len + 1) {
-		unsigned int newSize = buf->cap + 64; // growing size
+		size_t newSize = buf->cap + 64; // growing size
 
-		char *newAlloc = realloc(buf->data, newSize);
+		void *newAlloc = realloc(buf->data, newSize);
 
-		if (newAlloc == NULL) {
-			return;
+		if (newSize > buf->cap && newAlloc) {
+			size_t diff = newSize - buf->cap;
+			void *pStart = ((char *) newAlloc) + buf->cap;
+			memset(pStart, '\0', diff);
+
+			buf->data = newAlloc;
+			buf->cap = newSize;
 		}
-
-		buf->data = newAlloc;
-		buf->cap = newSize;
-		memset(buf->data + buf->len, '\0', buf->cap);
 	}
 
 	buf->data[buf->len++] = c;
@@ -54,7 +56,12 @@ static void writeStringInBuf(struct buffer *buf, const char *str) {
  * the values from the environment (or default values after `:-` if provided).
  */
 char *envsubst(const char *str) {
-	unsigned int strLen = strlen(str);
+	size_t strLen = strlen(str);
+
+	if (strLen < 4) {
+		return (char *) str;
+	}
+
 	struct buffer *result = newBuf(strLen);
 	struct buffer *envName = newBuf(32);
 	struct buffer *envDef = newBuf(32);
@@ -139,7 +146,7 @@ char *envsubst(const char *str) {
 	char *data = result->data;
 	free(result);
 
-	return data;
+	return (char *) data;
 }
 
 //#include <assert.h>
@@ -166,7 +173,8 @@ char *envsubst(const char *str) {
 //	) == 0);
 //
 //	assert(strcmp(
-//		envsubst("__$FOO ${bar} $FOO:def ${Test_1:-def} ${Test_1} ${_UNSET_VAR_:-default} bla-bla ${FOO2:-тест}${ABC} ${}${}"),
+//		envsubst(
+//			"__$FOO ${bar} $FOO:def ${Test_1:-def} ${Test_1} ${_UNSET_VAR_:-default} bla-bla ${FOO2:-тест}${ABC} ${}${}"),
 //		"__$FOO  $FOO:def foo foo default bla-bla тест "
 //	) == 0);
 //

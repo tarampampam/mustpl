@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <errno.h>
 #include "../libs/cjson/cJSON.h"
 #include "../libs/mustach/mustach-cjson.h"
 #include "utils.h"
 #include "cli.h"
+#include "envsubst.h"
 
 int main(int argc, char **argv) {
 	struct CliArguments arguments = {NULL};
@@ -22,14 +24,9 @@ int main(int argc, char **argv) {
 		data = "{}"; // fallback for the empty data and data_file
 	}
 
-	template = readFile(arguments.template_file); // template initialization
+	data = envsubst(data);
 
-//	// TODO implement variables support
-//	struct TemplateVariable *ptr = arguments.vars;
-//	while (ptr) {
-//		printf("==var== (%s,%s) \n", ptr->name, ptr->value);
-//		ptr = ptr->next;
-//	}
+	template = readFile(arguments.template_file); // template initialization
 
 	cJSON *jsonRoot = cJSON_Parse(data);
 

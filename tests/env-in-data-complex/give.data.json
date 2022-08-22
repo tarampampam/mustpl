@@ -1,0 +1,7 @@
+{
+  "case1": "__$_UNSET_VAR_ ${_UNSET_VAR_} ${_UNSET_VAR_:-default value 😎}", 
+  "case2": "${__Test_2} ${__Test_2:-foo}${_UNSET_VAR_:-def}${__Test_2}",
+  "case3": "${Test_1} ${Test_1:-def}${Test_1}",
+  "case4": "__$FOO ${bar} $FOO:def ${Test_1:-def} ${Test_1} ${_UNSET_VAR_:-default} bla-bla ${FOO2:-тест}${ABC} ${}${}",
+  "case5": "${_UNSET_VAR_:-${Test_1}}"
+}

@@ -1,0 +1,4 @@
+start
+foo: {{ foo }}
+bar: {{ bar }}
+end
