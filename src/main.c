@@ -1,13 +1,47 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 #include <errno.h>
 #include "../libs/cjson/cJSON.h"
 #include "../libs/mustach/mustach-cjson.h"
-#include "utils.h"
 #include "cli.h"
 #include "envsubst.h"
+
+char *readFile(const char *filePath) {
+	FILE *f = fopen(filePath, "rb");
+
+	if (!f) {
+		perror("Cannot open/read file");
+
+		exit(1);
+	}
+
+	fseek(f, 0, SEEK_END);
+	long fileSize = ftell(f);
+	fseek(f, 0, SEEK_SET);
+
+	char *data = malloc(fileSize + 1);
+	fread(data, fileSize, 1, f);
+	fclose(f);
+
+	data[fileSize] = '\0';
+
+	return data;
+}
+
+void writeFile(const char *filePath, const char *text) {
+	FILE *f = fopen(filePath, "w");
+
+	if (!f) {
+		perror("Cannot create file");
+
+		exit(1);
+	}
+
+	fprintf(f, "%s", text);
+
+	fclose(f);
+}
 
 int main(int argc, char **argv) {
 	struct CliArguments arguments = {NULL};

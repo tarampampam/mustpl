@@ -2,7 +2,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "utils.h"
 #include "cli.h"
 #include "version.h"
 
@@ -50,7 +49,7 @@ static error_t parseOptions(int key, char *arg, struct argp_state *state) {
 				if (!in->exec) {
 					struct ExecProcess *exec = malloc(sizeof(struct ExecProcess));
 					exec->path = arg;
-					exec->args = malloc(state->argc * sizeof(char *));
+					exec->args = malloc((state->argc + 1) * sizeof(char *));
 
 					in->exec = exec;
 				} else {
