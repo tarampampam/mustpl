@@ -8,10 +8,14 @@ COPY . /tmp/mustpl
 
 WORKDIR /tmp/mustpl
 
+ARG BUILD_STATIC="no"
 ARG VERSION="0.0.0-undefined"
 
 # compile
-RUN make version="$VERSION"
+RUN make static="$BUILD_STATIC" version="$VERSION"
+
+# exit with error code 1 if the executable is dynamic (not static)
+RUN if [ "${BUILD_STATIC}" != "no" ]; then ldd ./mustpl && exit 1 || true; fi
 
 # tests running is not required, but strongly recommended
 RUN make test
@@ -30,7 +34,12 @@ RUN set -x \
     && mkdir -p ./bin ./etc \
     && mv /tmp/mustpl/mustpl ./bin/mustpl \
     && echo 'nobody:x:65534:65534::/nonexistent:/sbin/nologin' > ./etc/passwd \
-    && echo 'nogroup:x:65534:' > ./etc/group
+    && echo 'nogroup:x:65534:' > ./etc/group \
+    && if [ "${BUILD_STATIC}" = "no" ]; then \
+        for library in $(ldd ./bin/mustpl | cut -d '>' -f 2 | awk '{print $1}'); do \
+	        cp --verbose --parents "${library}" . \
+        ;done \
+    ;fi
 
 # use empty filesystem
 FROM scratch as runtime

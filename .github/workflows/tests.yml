@@ -21,14 +21,21 @@ jobs: # Docs: <https://git.io/JvxXE>
       - uses: gacts/gitleaks@v1 # Action page: <https://github.com/gacts/gitleaks>
 
   build:
-    name: Build & test
+    name: "Build & test (static: ${{ matrix.static }})"
     runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix: {static: [yes, no]}
     steps:
       - uses: actions/checkout@v3
 
-      - run: make
+      - run: make static=${{ matrix.static }}
 
-      - run: ldd ./mustpl && exit 1 || true
+      - if: matrix.static == 'yes'
+        run: ldd ./mustpl && exit 1 || true
+
+      - if: matrix.static == 'no'
+        run: ldd ./mustpl
 
       - run: make test
 

@@ -103,6 +103,7 @@ And compile:
 
 ```shell
 $ make version=1.1.1 # set your version
+$ make version=1.1.1 static=yes # static linking
 $ ./mustpl --help
 ```
 
