@@ -1,7 +1,7 @@
 FROM alpine:latest as builder
 
 RUN set -x \
-    && apk add --no-cache make file bash gcc musl-dev
+    && apk add --no-cache make file gcc musl-dev
 
 COPY . /tmp/mustpl
 
