@@ -18,7 +18,7 @@
 
 # 🧾 Overview
 
-Sometimes you may need to generate data using templates, and this tool allows you to do it in the simplest way. All it takes is the template itself, the data for it (the values that are inserted in the template), and this tool.
+Sometimes you might need to generate data using templates, and this tool allows you to do it in the simplest way. All it takes is the template itself, the data for it (the values that are inserted in the template), and this tool.
 
 <details>
   <summary>👉 The simplest example</summary>
@@ -60,12 +60,12 @@ server {
 
 ## 🔥 Features list
 
-- Has zero external dependencies
-- Can be used in a docker `scratch` image (empty file system)
+- Zero external dependencies
+- Can be used in a base docker `scratch` image (empty file system)
 - Powerful templating engine under the hood - {{ [mustache][mustache] }}
-- Distributed as compiled for many architectures, including **docker** image
+- Distributed being compiled for many architectures, including **docker** image
 - Lightweight _(**~400Kb** compressed, statically linked)_ and fast (written in pure C)
-- Support environment variables in the template data, with default values (`${ENV_NAME:-default value}`)
+- Supports substitution from environment variables into the template, with default values fallback (`${ENV_NAME:-default value}`)
 - Can be used as docker entrypoint (can start another application without PID changing - `mustpl ... -- nginx -g 'daemon off;'`)
 
 ## 🧩 Install
@@ -84,7 +84,7 @@ $ mustpl --help
 
 ### 🛸 Compilation from sources
 
-All you need to compile - is gcc:
+All you need to compile is gcc:
 
 ```shell
 $ sudo apt install gcc
@@ -169,7 +169,7 @@ $ docker run --rm -ti \
       ghcr.io/tarampampam/mustpl --help
 ```
 
-Or install it into another image:
+Or simply add it to another image:
 
 ```dockerfile
 FROM nginx:alpine
@@ -241,7 +241,7 @@ Well, 6000 dollars, after taxes.
 
 ### 🔄 Loops
 
-Okay, but what about the **loops**? Let's see:
+Okay, but what about the **loops**? Here you go:
 
 ```json
 {
@@ -304,7 +304,7 @@ server {
 
 ### 🚩 Template data providing using options
 
-You can provide your template data using the `-d` (`--data`) option:
+You can provide your template data from cli using the `-d` (`--data`) flag:
 
 ```mustache
 server {
@@ -333,7 +333,7 @@ server {
 
 ### 📎 Environment variables
 
-Environment variables can be used in the format `${ENV_NAME:-default value}` (inside template data file too; _template from the example above is used_):
+Environment variables can be used in the following format: `${ENV_NAME:-default value}` (inside template data file too; _template from the example above is used_):
 
 ```shell
 $ SERVER_NAME_1=example.com ./mustpl -d '{"names": [{"name": "${SERVER_NAME_1:-fallback.com}"}, {"name": "${SERVER_NAME_X:-unset.com}"}]}' ./tmp/template.txt
@@ -377,7 +377,7 @@ From the `man exec`:
 
 > The `exec()` family  of functions replaces the current process image with a new process image
 
-So, the application `/bin/app` will have a PID == 1 that previously was assigned to the `bash` (because the `bash` is the image entrypoint). `mustpl` uses the same technique, let's create the following files for the example:
+So, the application `/bin/app` will have a PID == 1 that was previously assigned to the `bash` (because the `bash` is the image entrypoint). `mustpl` uses the same technique, let's create the following files for the example:
 
 `data.json`:
 
@@ -414,7 +414,7 @@ Next, build the image:
 $ docker build --tag test:local .
 ```
 
-And run it:
+And then run it:
 
 ```shell
 $ docker run --rm --name mustpl_example -e "MY_OPTION=foobar" test:local
@@ -434,7 +434,7 @@ Hello foobar! # <-- our environment variable value
 $ docker kill mustpl_example
 ```
 
-Agree that this approach is easier than using `sed`, `awk`, and other tools to modify the configuration files before running the main application. But despite this, no one is restricting you from using the entrypoint scripts 😉
+That this approach is easier than using `sed`, `awk`, and other tools to modify the configuration files before running the main application, isn't it? But despite this, no one is restricting you from using the entrypoint scripts 😉
 
 ## 🔌 Used libraries
 
