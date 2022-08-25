@@ -5,6 +5,7 @@
 .git
 LICENSE
 /obj/*.o
+/obj/*.a
 mustpl
 temp
 tmp
