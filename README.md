@@ -62,7 +62,7 @@ server {
 - [mustache][mustache] templating engine under the hood
 - Can be used in a `scratch` docker image (empty file system)
 - Distributed being compiled for many architectures, including **docker** image
-- Lightweight _(**~55Kb** compressed, statically linked)_ and fast (written in pure C)
+- Extremely lightweight _(**~55Kb** compressed, statically linked)_ and fast (written in pure C)
 - Supports substitution from environment variables into the template, with default values fallback (`${ENV_NAME:-default value}`)
 - Can be used as docker entrypoint (can start another application without PID changing - `mustpl ... -- nginx -g 'daemon off;'`)
 
