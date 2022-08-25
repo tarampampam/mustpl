@@ -8,8 +8,8 @@ version ?= 0.0.0-undefined
 
 .PHONY: src/version.h $(TARGET) clean
 
-$(TARGET): obj/libargp.a obj/cjson.o obj/mustach-cjson.o obj/mustach-wrap.o obj/mustach.o obj/envsubst.o obj/cli.o obj/main.o
-	$(CC) $(LDFLAGS) -L./obj $(wildcard obj/*.o) -o $(TARGET) -largp
+$(TARGET): obj/libargp.a obj/libcjson.a obj/mustach-cjson.o obj/mustach-wrap.o obj/mustach.o obj/envsubst.o obj/cli.o obj/main.o
+	$(CC) $(LDFLAGS) -L./obj $(wildcard obj/*.o) -o $(TARGET) -largp -lcjson
 	@-file $(TARGET) # print file info
 
 src/version.h:
@@ -30,6 +30,17 @@ obj/libargp.a:
 	rm obj/argp-ba.o obj/argp-eexst.o obj/argp-fmtstream.o obj/argp-help.o obj/argp-parse.o obj/argp-pv.o obj/argp-pvh.o
 
 
+obj/libcjson.a:
+	$(CC) $(CFLAGS) -o obj/cjson.o libs/cjson/cJSON.c
+	ar cr obj/libcjson.a obj/cjson.o
+	rm obj/cjson.o
+
+
+
+
+
+
+
 
 obj/envsubst.o: src/envsubst.c
 	$(CC) $(CFLAGS) -o $@ $<
@@ -40,8 +51,6 @@ obj/cli.o: src/cli.c src/version.h
 obj/main.o: src/main.c
 	$(CC) $(CFLAGS) -o $@ $<
 
-obj/cjson.o: libs/cjson/cJSON.c
-	$(CC) $(CFLAGS) -o $@ $<
 
 obj/mustach.o: libs/mustach/mustach.c
 	$(CC) $(CFLAGS) -o $@ $<

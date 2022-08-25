@@ -1,5 +1,6 @@
 #!/bin/sh
 
-echo -e "Hello from the script!\nnew line";
+echo "Hello from the script!";
+echo "new line";
 
 exit 33;
