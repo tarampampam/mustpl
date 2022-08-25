@@ -13,7 +13,7 @@ ARG VERSION="0.0.0-undefined"
 # compile
 RUN make version="$VERSION"
 
-# tests running is not required, but strongly recommended
+# running tests is not required, but it's strongly recommended
 RUN make test
 
 # print out some info about the binary file
@@ -47,7 +47,7 @@ LABEL \
     org.opencontainers.version="$VERSION" \
     org.opencontainers.image.licenses="MIT"
 
-# use an unprivileged user
+# use the unprivileged user
 USER 65534:65534
 
 # import from builder
