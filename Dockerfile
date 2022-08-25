@@ -1,8 +1,7 @@
-FROM debian:11-slim as builder
+FROM alpine:latest as builder
 
 RUN set -x \
-    && apt-get update \
-    && apt-get install -y make file gcc
+    && apk add --no-cache make file bash gcc musl-dev
 
 COPY . /tmp/mustpl
 
