@@ -16,8 +16,6 @@
 [badge-version]:https://img.shields.io/github/v/release/tarampampam/mustpl?maxAge=30&label=version&style=flat-square
 </div>
 
-# 🧾 Overview
-
 Sometimes you might need to generate data using templates, and this tool allows you to do it in the simplest way. All it takes is the template itself, the data for it (the values that are inserted in the template), and this tool.
 
 <details>
@@ -61,16 +59,16 @@ server {
 ## 🔥 Features list
 
 - Zero external dependencies
-- Can be used in a base docker `scratch` image (empty file system)
-- Powerful templating engine under the hood - {{ [mustache][mustache] }}
+- [mustache][mustache] templating engine under the hood
+- Can be used in a `scratch` docker image (empty file system)
 - Distributed being compiled for many architectures, including **docker** image
-- Lightweight _(**~400Kb** compressed, statically linked)_ and fast (written in pure C)
+- Lightweight _(**~55Kb** compressed, statically linked)_ and fast (written in pure C)
 - Supports substitution from environment variables into the template, with default values fallback (`${ENV_NAME:-default value}`)
 - Can be used as docker entrypoint (can start another application without PID changing - `mustpl ... -- nginx -g 'daemon off;'`)
 
-## 🧩 Install
+## 🧩 Installation
 
-Download the latest binary file for your arch (_only the linux-like platforms are supported at the moment_) from the [releases page][release-latest]. For example, let's install it on amd64 arch (e.g.: Debian, Ubuntu, etc):
+Download the latest binary file for your arch (_only the linux-like platforms are supported at the moment; to run on macOS use the `linux/arm*` platform_) from the [releases page][release-latest]. For example, let's install it on amd64 arch (e.g.: Debian, Ubuntu, etc):
 
 ```bash
 $ curl -SsL -o ./mustpl https://github.com/tarampampam/mustpl/releases/latest/download/mustpl-linux-amd64
@@ -82,12 +80,16 @@ $ rm ./mustpl
 $ mustpl --help
 ```
 
-### 🛸 Compilation from sources
+<details>
+  <summary>🛸 Compilation from sources</summary>
 
 All you need to compile is gcc:
 
 ```shell
 $ sudo apt install gcc
+
+# on linux alpine:
+$ apk add make gcc musl-dev
 ```
 
 Get the sources and switch to the latest version:
@@ -106,7 +108,9 @@ $ make version=1.1.1 # set your version
 $ ./mustpl --help
 ```
 
-### 🐋 Docker
+</details>
+
+### 🐋 Docker image
 
 Additionally, you can use our docker image:
 
@@ -115,10 +119,10 @@ Additionally, you can use our docker image:
 | [GitHub Container Registry][ghcr] | `ghcr.io/tarampampam/mustpl` |
 | [Docker Hub][docker-hub]          | `tarampampam/mustpl`         |
 
-> Using the `latest` tag for the docker image is highly discouraged because of possible backward-incompatible changes during **major** upgrades. Please, use tags in `X.Y.Z` format
+> ⚠ Using the `latest` tag for the docker image is highly discouraged because of possible backward-incompatible changes during **major** upgrades. Please, use tags in `X.Y.Z` format
 
 <details>
-  <summary>What's inside the Docker image?</summary>
+  <summary>🔍 What's inside the Docker image?</summary>
 
 To watch the docker image content you can use the [dive](https://github.com/wagoodman/dive):
 
@@ -131,28 +135,27 @@ $ docker run --rm -it \
 
 <div align="center">
 
-![dive](https://user-images.githubusercontent.com/7326800/186013969-743634e4-3263-42c6-82f4-2283e9f8755e.png)
+![dive](https://user-images.githubusercontent.com/7326800/186757406-fdff74ca-dd3d-4be8-9323-65787289db9b.png)
 
 </div>
 
 </details>
 
 <details>
-  <summary>Which platforms are supported?</summary>
+  <summary>🔍 Which platforms are supported?</summary>
 
 Following platforms for this image are available:
 
 ```shell
 $ docker run --rm mplatform/mquery ghcr.io/tarampampam/mustpl:latest
-Image: tarampampam/mustpl:latest
- * Manifest List: Yes
+Image: ghcr.io/tarampampam/mustpl:latest
+ * Manifest List: Yes (Image type: application/vnd.docker.distribution.manifest.list.v2+json)
  * Supported platforms:
    - linux/386
    - linux/amd64
-   - linux/arm/v5
+   - linux/arm/v6
    - linux/arm/v7
    - linux/arm64
-   - linux/mips64le
    - linux/ppc64le
    - linux/s390x
 ```
@@ -179,7 +182,7 @@ COPY --from=ghcr.io/tarampampam/mustpl /bin/mustpl /bin/mustpl
 RUN mustpl --help
 ```
 
-## 🛠 Usage
+## 🛠 CLI Overview
 
 ```shell
 Usage: mustpl [OPTION...] <template-file> [-- <exec-command>]
@@ -222,21 +225,32 @@ For example, you have the following template data (`data.json`):
 
 And template (`template.txt`):
 
-```mustache
-Hello {{name}}
-You have just won {{value}} dollars!
+```html
+<!DOCTYPE html>
+<html>
+<head><title>Hello {{name}}</title></head>
+<body>
+  <p>You have just won <strong>{{value}}</strong> dollars!</p>
+
 {{#in_ca}}
-Well, {{taxed_value}} dollars, after taxes.
+  <p style="font-size: .7em">Well, <i>{{taxed_value}} dollars</i>, after taxes.</p>
 {{/in_ca}}
+</body>
+</html>
 ```
 
 Let's do the magic!
 
-```shell
-$ mustpl -f ./data.json ./template.txt
-Hello Chris
-You have just won 10000 dollars!
-Well, 6000 dollars, after taxes.
+```html
+<!DOCTYPE html>
+<html>
+<head><title>Hello Chris</title></head>
+<body>
+  <p>You have just won <strong>10000</strong> dollars!</p>
+
+  <p style="font-size: .7em">Well, <i>6000 dollars</i>, after taxes.</p>
+</body>
+</html>
 ```
 
 ### 🔄 Loops
@@ -266,7 +280,7 @@ Okay, but what about the **loops**? Here you go:
 }
 ```
 
-```mustache
+```nginx
 {{#servers}}
 server { {{! just a comment, will not be rendered }}
   listen      {{ listen }};
@@ -306,7 +320,7 @@ server {
 
 You can provide your template data from cli using the `-d` (`--data`) flag:
 
-```mustache
+```nginx
 server {
   listen      8080;
   server_name{{#names}} {{ name }}{{/names}};
@@ -435,11 +449,6 @@ $ docker kill mustpl_example
 ```
 
 That this approach is easier than using `sed`, `awk`, and other tools to modify the configuration files before running the main application, isn't it? But despite this, no one is restricting you from using the entrypoint scripts 😉
-
-## 🔌 Used libraries
-
-- [`cJSON` - Ultralightweight JSON parser in ANSI C](https://github.com/DaveGamble/cJSON/)
-- [`mustach` - C implementation of mustache templating](https://gitlab.com/jobol/mustach)
 
 ## 📰 Changes log
 
