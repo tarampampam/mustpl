@@ -29,7 +29,7 @@ jobs:
           file: Dockerfile
           push: true
           # supported platforms list can be found here: <https://hub.docker.com/_/gcc/tags?page=1&name=12>
-          platforms: linux/386,linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/mips64le,linux/ppc64le,linux/s390x # <-- important
+          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x # <-- important
           tags: |
             tarampampam/mustpl:latest
             tarampampam/mustpl:${{ steps.tag.outputs.version-semantic }}
@@ -45,10 +45,9 @@ jobs:
         platform: # the list should be the same as the platforms listed above
           - linux/386
           - linux/amd64
-          - linux/arm/v5
+          - linux/arm/v6
           - linux/arm/v7
           - linux/arm64/v8
-          - linux/mips64le
           - linux/ppc64le
           - linux/s390x
     steps:
