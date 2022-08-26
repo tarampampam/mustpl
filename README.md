@@ -241,7 +241,9 @@ And template (`template.txt`):
 
 Let's do the magic!
 
-```html
+```shell
+$ mustpl -f ./data.json ./template.txt
+
 <!DOCTYPE html>
 <html>
 <head><title>Hello Chris</title></head>
