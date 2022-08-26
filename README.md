@@ -417,7 +417,7 @@ You can provide your template data from cli using the `-d` (`--data`) flag:
 ```nginx
 server {
   listen      8080;
-  server_name{{#names}} {{ name }}{{/names}};
+  server_name{{#names}} {{ . }}{{/names}};
 
   location / {
     root  /var/www/data;
@@ -427,7 +427,7 @@ server {
 ```
 
 ```shell
-$ mustpl -d '{"names": [{"name": "example.com"}, {"name": "google.com"}]}' ./template.txt
+$ mustpl -d '{"names": ["example.com", "google.com"]}' ./template.txt
 server {
   listen      8080;
   server_name example.com google.com;
