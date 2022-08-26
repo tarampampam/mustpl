@@ -68,7 +68,7 @@ server {
 
 ## 🧩 Installation
 
-Download the latest binary file for your arch (_only the linux-like platforms are supported at the moment; to run on macOS use the `linux/arm*` platform_) from the [releases page][release-latest]. For example, let's install it on amd64 arch (e.g.: Debian, Ubuntu, etc):
+Download the latest binary file for your arch (_only the linux-like platforms are supported at the moment; to run on macOS use the `linux/arm64` platform_) from the [releases page][release-latest]. For example, let's install it on amd64 arch (e.g.: Debian, Ubuntu, etc):
 
 ```bash
 $ curl -SsL -o ./mustpl https://github.com/tarampampam/mustpl/releases/latest/download/mustpl-linux-amd64
@@ -210,7 +210,7 @@ allowed (not $ENV_NAME).
 
 ### 🦾 What the `mustpl` can do
 
-> For detailed information about the templating engine please refer to the following links - [mustache manual][mustache] and the [library repository](https://gitlab.com/jobol/mustach)
+> 🌟 For detailed information about the templating engine please refer to the following links - [mustache manual][mustache] and the [library repository](https://gitlab.com/jobol/mustach)
 
 For example, you have the following template data (`data.json`):
 
@@ -478,7 +478,7 @@ COPY docker-entrypoint.sh ./docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["/bin/app", "--some", "option"]
+CMD ["/bin/app", "--another", "flags"]
 ```
 
 From the `man exec`:
