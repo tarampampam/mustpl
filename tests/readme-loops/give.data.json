@@ -1,0 +1,25 @@
+{
+  "servers": [
+    {
+      "listen": 8080,
+      "names": [
+        "example.com"
+      ],
+      "is_default": true,
+      "home": "/www/example.com"
+    },
+    {
+      "listen": 1088,
+      "names": [
+        "127-0-0-1.nip.io",
+        "127-0-0-2.nip.io"
+      ],
+      "home": "/www/local"
+    }
+  ],
+
+  "people": {
+    "John": 27,
+    "Mark": "32"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "person": {
+    "name": "Harry",
+    "age": 37
+  },
+  "lang": "fr",
+  "l10n": {
+    "en": "Hello",
+    "fr": "Salut"
+  }
+}

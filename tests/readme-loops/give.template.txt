@@ -1,0 +1,15 @@
+{{#servers}}
+server { {{! just a comment, will not be rendered }}
+  listen      {{ listen }};
+  server_name{{#names}} {{ . }}{{/names}}{{#is_default}} default_server{{/is_default}};
+
+  location / {
+    root  {{ home }};
+    index index.html index.htm;
+  }
+}
+{{/servers}}
+
+{{#people.*}}
+- {{ * }} is {{ . }} years old
+{{/people.*}}

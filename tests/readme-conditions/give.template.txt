@@ -1,0 +1,20 @@
+{{#person.name=Harry}}
+Hello Harry!
+{{/person.name=Harry}}
+
+{{^person.name=John}}
+The person's name is not John.
+{{/person.name=John}}
+
+{{#person.age>40}}
+He's over 40 years old.
+{{/person.age>40}}{{^person.age>40}}
+He's definitely not more than 40 years old.
+{{/person.age>40}}
+
+{{#lang=fr}}{{ l10n.fr }}{{/lang=fr}}{{#lang=!fr}}{{ l10n.en }}{{/lang=!fr}} {{ person.name }}!
+
+Render only if equals:
+- {{ person.age=36 }}
+- {{ person.age=37 }}
+- {{ person.age=38 }}

@@ -210,7 +210,7 @@ allowed (not $ENV_NAME).
 
 ### 🦾 What the `mustpl` can do
 
-> For detailed information about the templating engine please refer to the following link: [mustache manual][mustache]
+> For detailed information about the templating engine please refer to the following links - [mustache manual][mustache] and the [library repository](https://gitlab.com/jobol/mustach)
 
 For example, you have the following template data (`data.json`):
 
@@ -253,9 +253,75 @@ Let's do the magic!
 </html>
 ```
 
+### ✅ Conditions
+
+You can test the value of the selected key using the following operators:
+
+- `key=value` (matching test)
+- `key=!value` (not matching test)
+- `key>value` (greater)
+- `key>=value` (greater or equal)
+- `key<value` (lesser)
+- `key<=value` (lesser or equal)
+
+```json
+{
+  "person": {
+    "name": "Harry",
+    "age": 37
+  },
+  "lang": "fr",
+  "l10n": {
+    "en": "Hello",
+    "fr": "Salut"
+  }
+}
+```
+
+```mustach
+{{#person.name=Harry}}
+Hello Harry!
+{{/person.name=Harry}}
+
+{{^person.name=John}}
+The person's name is not John.
+{{/person.name=John}}
+
+{{#person.age>40}}
+He's over 40 years old.
+{{/person.age>40}}{{^person.age>40}}
+He's definitely not more than 40 years old.
+{{/person.age>40}}
+
+{{#lang=fr}}{{ l10n.fr }}{{/lang=fr}}{{#lang=!fr}}{{ l10n.en }}{{/lang=!fr}} {{ person.name }}!
+
+Render only if equals:
+- {{ person.age=36 }}
+- {{ person.age=37 }}
+- {{ person.age=38 }}
+```
+
+Will be rendered as follows:
+
+```text
+Hello Harry!
+
+The person's name is not John.
+
+
+He's definitely not more than 40 years old.
+
+Salut Harry!
+
+Render only if equals:
+-
+- 37
+-
+```
+
 ### 🔄 Loops
 
-Okay, but what about the **loops**? Here you go:
+Okay, but what about the **loops**? Here you go (the value of the current field can be accessed using single dot `{{ . }}`):
 
 ```json
 {
@@ -263,7 +329,7 @@ Okay, but what about the **loops**? Here you go:
     {
       "listen": 8080,
       "names": [
-        {"name": "example.com"}
+        "example.com"
       ],
       "is_default": true,
       "home": "/www/example.com"
@@ -271,8 +337,8 @@ Okay, but what about the **loops**? Here you go:
     {
       "listen": 1088,
       "names": [
-        {"name": "127-0-0-1.nip.io"},
-        {"name": "127-0-0-2.nip.io"}
+        "127-0-0-1.nip.io",
+        "127-0-0-2.nip.io"
       ],
       "home": "/www/local"
     }
@@ -284,7 +350,7 @@ Okay, but what about the **loops**? Here you go:
 {{#servers}}
 server { {{! just a comment, will not be rendered }}
   listen      {{ listen }};
-  server_name{{#names}} {{ name }}{{/names}}{{#is_default}} default_server{{/is_default}};
+  server_name{{#names}} {{ . }}{{/names}}{{#is_default}} default_server{{/is_default}};
 
   location / {
     root  {{ home }};
@@ -315,6 +381,32 @@ server {
   }
 }
 ```
+
+In addition, you can use the pattern `{{#X.*}} ... {{/X.*}}` to iterate on fields of `X` :
+
+```json
+{
+  "people": {
+    "John": 27,
+    "Mark": "32"
+  }
+}
+```
+
+```mustach
+{{#people.*}}
+- {{ * }} is {{ . }} years old
+{{/people.*}}
+```
+
+Produces:
+
+```text
+- John is 27 years old
+- Mark is 32 years old
+```
+
+Here the single star `{{ * }}` is replaced by the iterated key and the single dot `{{ . }}` is replaced by its value.
 
 ### 🚩 Template data providing using options
 

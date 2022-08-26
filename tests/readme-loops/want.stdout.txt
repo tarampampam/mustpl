@@ -1,0 +1,21 @@
+server { 
+  listen      8080;
+  server_name example.com default_server;
+
+  location / {
+    root  /www/example.com;
+    index index.html index.htm;
+  }
+}
+server { 
+  listen      1088;
+  server_name 127-0-0-1.nip.io 127-0-0-2.nip.io;
+
+  location / {
+    root  /www/local;
+    index index.html index.htm;
+  }
+}
+
+- John is 27 years old
+- Mark is 32 years old

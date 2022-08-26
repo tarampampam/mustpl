@@ -1,0 +1,13 @@
+Hello Harry!
+
+The person's name is not John.
+
+
+He's definitely not more than 40 years old.
+
+Salut Harry!
+
+Render only if equals:
+- 
+- 37
+- 
