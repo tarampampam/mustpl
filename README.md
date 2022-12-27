@@ -9,8 +9,8 @@
 [![badge-license][badge-license]][docker-hub]
 
 [banner]:https://user-images.githubusercontent.com/7326800/185954094-bdc16f92-4554-4e41-97e9-82e5b9e47b53.png
-[badge-tests]:https://img.shields.io/github/workflow/status/tarampampam/mustpl/tests?maxAge=30&label=tests&logo=github&style=flat-square
-[badge-release]:https://img.shields.io/github/workflow/status/tarampampam/mustpl/release?maxAge=30&label=release&logo=github&style=flat-square
+[badge-tests]:https://img.shields.io/github/actions/workflow/status/tarampampam/mustpl/tests.yml?branch=master&maxAge=30&label=tests&logo=github&style=flat-square
+[badge-release]:https://img.shields.io/github/actions/workflow/status/tarampampam/mustpl/release.yml?maxAge=30&label=release&logo=github&style=flat-square
 [badge-image-size]:https://img.shields.io/docker/image-size/tarampampam/mustpl/latest?maxAge=30&label=size&logo=docker&logoColor=white&style=flat-square
 [badge-license]:https://img.shields.io/github/license/tarampampam/mustpl.svg?maxAge=30&style=flat-square
 [badge-version]:https://img.shields.io/github/v/release/tarampampam/mustpl?maxAge=30&label=version&style=flat-square
