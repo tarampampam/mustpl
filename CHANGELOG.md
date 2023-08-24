@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog][keepachangelog] and this project adher
 
 ### Fixed
 
-- Braces processing in the default environ variable values
+- Braces processing in the default environment variable values
 
 ## v0.1.0
 
