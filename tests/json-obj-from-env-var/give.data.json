@@ -1,0 +1,4 @@
+{
+  "the_list": ${__JSON_LIST__:-{}},
+  "the_value": 12345
+}
