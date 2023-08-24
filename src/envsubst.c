@@ -180,7 +180,7 @@ char *envsubst(const char *str) {
 //	assert(strcmp(
 //		envsubst(
 //			"__$FOO ${bar} $FOO:def ${Test_1:-def} ${Test_1} ${_UNSET_VAR_:-default} bla-bla ${FOO2:-тест}${ABC} ${}${}"),
-//		 "__$FOO  $FOO:def foo foo default bla-bla тест "
+//			"__$FOO  $FOO:def foo foo default bla-bla тест "
 //	) == 0);
 //
 //	assert(strcmp(
