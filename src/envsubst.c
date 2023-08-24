@@ -73,6 +73,7 @@ char *envsubst(const char *str) {
 	} state = DATA, prevState = DATA;
 	bool flush = false;
 	unsigned int nested = 0;
+	unsigned int nestedInDef = 0;
 
 	for (unsigned int i = 0; str[i] != '\0'; i++) {
 		// detect the state
@@ -89,7 +90,9 @@ char *envsubst(const char *str) {
 			state = ENV_DEFAULT;
 
 			continue;
-		} else if (str[i] == '}' && (state == ENV_NAME || state == ENV_DEFAULT)) {
+		} else if (str[i] == '{' && nested > 0 && state == ENV_DEFAULT) {
+			nestedInDef++;
+		} else if (str[i] == '}' && nestedInDef == 0 && (state == ENV_NAME || state == ENV_DEFAULT)) {
 			nested--;
 
 			if (nested == 0) {
@@ -98,6 +101,8 @@ char *envsubst(const char *str) {
 				state = DATA;
 				flush = true;
 			}
+		} else if (str[i] == '}' && nested > 0 && state == ENV_DEFAULT) {
+			nestedInDef--;
 		}
 
 		const char c = str[i];
@@ -175,7 +180,7 @@ char *envsubst(const char *str) {
 //	assert(strcmp(
 //		envsubst(
 //			"__$FOO ${bar} $FOO:def ${Test_1:-def} ${Test_1} ${_UNSET_VAR_:-default} bla-bla ${FOO2:-тест}${ABC} ${}${}"),
-//		"__$FOO  $FOO:def foo foo default bla-bla тест "
+//			"__$FOO  $FOO:def foo foo default bla-bla тест "
 //	) == 0);
 //
 //	assert(strcmp(
@@ -188,5 +193,27 @@ char *envsubst(const char *str) {
 //		"aaa } "
 //	) == 0);
 //
-//	// printf("%s\n", envsubst("aaa ${}} ${${} bbb"));
+//	assert(strcmp(
+//		envsubst("__${_UNSET_VAR_:-{\"string\"}}__"),
+//		"__{\"string\"}__"
+//	) == 0);
+//
+//	assert(strcmp(
+//		envsubst("__${_UNSET_VAR_:- {} }__"),
+//		"__ {} __"
+//	) == 0);
+//
+//	assert(strcmp(
+//		envsubst("{\"a\":1, \"root\": ${_UNSET_VAR_:-{\"foo\": 123}}, \"b\":2}"),
+//		"{\"a\":1, \"root\": {\"foo\": 123}, \"b\":2}"
+//	) == 0);
+//
+//	putenv("__JSON_VAR__={\"foo\": \"bar\"}");
+//
+//	printf("%s\n", envsubst("{\"a\":1, \"root\": ${__JSON_VAR__:-{}}, \"b\":2}")); // TODO: comment this line
+//
+//	assert(strcmp(
+//		envsubst("{\"a\":1, \"root\": ${__JSON_VAR__:-{}}, \"b\":2}"),
+//		"{\"a\":1, \"root\": {\"foo\": \"bar\"}, \"b\":2}"
+//	) == 0);
 //}

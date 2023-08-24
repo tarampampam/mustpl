@@ -1,0 +1,7 @@
+The list:
+
+{{#the_list.*}}
+- {{ * }}: {{ . }}
+{{/the_list.*}}
+
+{{the_value}}

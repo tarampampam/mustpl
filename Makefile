@@ -44,7 +44,7 @@ src/version.h:
 
 test: ## Run tests
 	@set -e; for n in $(wildcard tests/*); do \
-		$(MAKE) -C $$n test clean; \
+		$(MAKE) -C $$n test clean || exit 1; \
 	done
 
 clean: ## Cleaning
