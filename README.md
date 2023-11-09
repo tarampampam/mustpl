@@ -68,7 +68,7 @@ server {
 
 ## 🧩 Installation
 
-Download the latest binary file for your arch (_only the linux-like platforms are supported at the moment; to run on macOS use the `linux/arm64` platform_) from the [releases page][release-latest]. For example, let's install it on amd64 arch (e.g.: Debian, Ubuntu, etc):
+Download the latest binary file for your arch (_only the linux-like platforms are supported at the moment) from the [releases page][release-latest]. For example, let's install it on amd64 arch (e.g.: Debian, Ubuntu, etc):
 
 ```bash
 $ curl -SsL -o ./mustpl https://github.com/tarampampam/mustpl/releases/latest/download/mustpl-linux-amd64
