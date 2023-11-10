@@ -16,7 +16,7 @@
 [badge-version]:https://img.shields.io/github/v/release/tarampampam/mustpl?maxAge=30&label=version&style=flat-square
 </div>
 
-Sometimes you might need to generate data using templates, and this tool allows you to do it in the simplest way. All it takes is the template itself, the data for it (the values that are inserted in the template), and this tool.
+Sometimes, you might need to generate data using templates, and this tool allows you to do it in the simplest way. All it takes is the template itself, the data for it (the values that are inserted in the template), and this tool.
 
 <details>
   <summary>👉 The simplest example</summary>
@@ -56,19 +56,19 @@ server {
 
 </details>
 
-## 🔥 Features list
+## 🔥 Features List
 
 - Zero external dependencies
-- [mustache][mustache] templating engine under the hood
-- Can be used in a `scratch` docker image (empty file system)
-- Distributed being compiled for many architectures, including **docker** image
-- Extremely lightweight _(**~55Kb** compressed, statically linked)_ and fast (written in pure C)
+- [Mustache][mustache] templating engine under the hood
+- Can be used in a `scratch` Docker image (empty file system)
+- Distributed, and compiled for many architectures, including a **Docker** image
+- Extremely lightweight (_**~55KB** compressed, statically linked_) and fast (written in pure C)
 - Supports substitution from environment variables into the template, with default values fallback (`${ENV_NAME:-default value}`)
-- Can be used as docker entrypoint (can start another application without PID changing - `mustpl ... -- nginx -g 'daemon off;'`)
+- Can be used as a Docker entrypoint (can start another application without PID changing - `mustpl ... -- nginx -g 'daemon off;'`)
 
 ## 🧩 Installation
 
-Download the latest binary file for your arch (_only the linux-like platforms are supported at the moment) from the [releases page][release-latest]. For example, let's install it on amd64 arch (e.g.: Debian, Ubuntu, etc):
+Download the latest binary file for your architecture (_only Linux-like platforms are supported at the moment_) from the [releases page][release-latest]. For example, let's install it on the amd64 architecture (e.g., Debian, Ubuntu, etc):
 
 ```bash
 $ curl -SsL -o ./mustpl https://github.com/tarampampam/mustpl/releases/latest/download/mustpl-linux-amd64
@@ -144,7 +144,7 @@ $ docker run --rm -it \
 <details>
   <summary>🔍 Which platforms are supported?</summary>
 
-Following platforms for this image are available:
+The following platforms for this image are available:
 
 ```shell
 $ docker run --rm mplatform/mquery ghcr.io/tarampampam/mustpl:latest
@@ -172,7 +172,7 @@ $ docker run --rm -ti \
       ghcr.io/tarampampam/mustpl --help
 ```
 
-Or simply add it to another image:
+Or add it to another image:
 
 ```dockerfile
 FROM nginx:alpine
@@ -303,7 +303,7 @@ Render only if equals:
 - {{ person.age=38 }}
 ```
 
-Will be rendered as follows:
+It will be rendered as follows:
 
 ```text
 Hello Harry!
@@ -323,7 +323,7 @@ Render only if equals:
 
 ### 🔄 Loops
 
-Okay, but what about the **loops**? Here you go (the value of the current field can be accessed using single dot `{{ . }}`):
+Okay, but what about the **loops**? Here you go (the value of the current field can be accessed using the single dot `{{ . }}`):
 
 ```json
 {
@@ -410,7 +410,7 @@ Produces:
 
 Here the single star `{{ * }}` is replaced by the iterated key and the single dot `{{ . }}` is replaced by its value.
 
-### 🚩 Template data providing using options
+### 🚩 Template data provided using options
 
 You can provide your template data from cli using the `-d` (`--data`) flag:
 
@@ -458,7 +458,7 @@ server {
 
 ### 🛰 `exec` and the PID magic
 
-As you probably know, the main process inside the docker container should have PID == 1 for the correct signals processing from the docker daemon. That's why basically entrypoint scripts have the following code:
+As you probably know, the main process inside the docker container should have PID == 1 for the correct signals processing from the docker daemon. That's why basically entry-point scripts have the following code:
 
 ```shell
 #!/bin/sh
@@ -542,7 +542,7 @@ Hello foobar! # <-- our environment variable value
 $ docker kill mustpl_example
 ```
 
-That this approach is easier than using `sed`, `awk`, and other tools to modify the configuration files before running the main application, isn't it? But despite this, no one is restricting you from using the entrypoint scripts 😉
+This approach is easier than using `sed`, `awk`, and other tools to modify the configuration files before running the main application. But despite this, no one is restricting you from using the entrypoint scripts 😉
 
 ## 📰 Changes log
 
