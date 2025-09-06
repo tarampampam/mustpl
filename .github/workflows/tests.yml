@@ -13,7 +13,7 @@ concurrency:
 jobs: # Docs: <https://git.io/JvxXE>
   gitleaks:
     name: GitLeaks
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0}
@@ -22,7 +22,7 @@ jobs: # Docs: <https://git.io/JvxXE>
 
   build:
     name: Build & test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -34,7 +34,7 @@ jobs: # Docs: <https://git.io/JvxXE>
 
   build-image:
     name: Build docker image (${{ matrix.platform }})
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     services:
       registry:
         image: registry:2
