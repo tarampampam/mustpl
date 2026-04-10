@@ -53,7 +53,8 @@ jobs: # Docs: <https://git.io/JvxXE>
     steps:
       - uses: actions/checkout@v6
 
-      - {uses: gacts/github-slug@v1, id: slug}
+      - uses: gacts/github-slug@v1
+        id: slug
 
       - uses: docker/setup-qemu-action@v3
 
@@ -76,7 +77,9 @@ jobs: # Docs: <https://git.io/JvxXE>
           docker create --name app --platform "${{ matrix.platform }}" localhost:5000/ci/app:latest
           docker cp app:/bin/mustpl ./mustpl
 
-      - {uses: gacts/github-slug@v1, id: filename, with: {to-slug: 'mustpl-${{ matrix.platform }}'}}
+      - uses: gacts/github-slug@v1
+        id: filename
+        with: {to-slug: 'mustpl-${{ matrix.platform }}'}
 
       - uses: actions/upload-artifact@v7
         with:
