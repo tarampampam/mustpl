@@ -16,6 +16,9 @@
 [badge-version]:https://img.shields.io/github/v/release/tarampampam/mustpl?maxAge=30&label=version&style=flat-square
 </div>
 
+> [!WARNING]  
+> **This project is no longer maintained**. The repository has been archived and will not receive any further updates or bug fixes. The code will remain available for reference and forking.
+
 Sometimes, you might need to generate data using templates, and this tool allows you to do it in the simplest way. All it takes is the template itself, the data for it (the values that are inserted in the template), and this tool.
 
 <details>
